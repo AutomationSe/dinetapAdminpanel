@@ -3,6 +3,7 @@ package pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -11,10 +12,12 @@ import java.time.Duration;
 public class UserPage {
     private WebDriver driver;
     private WebDriverWait wait;
+    private Actions actions;
 
     public UserPage(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        this.actions = new Actions(driver);
     }
 
     // Locators
@@ -71,18 +74,45 @@ public class UserPage {
         input.clear();
         input.sendKeys(password);
     }
+/*
+        public void selectCountry(String country) {
+            WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(countryDropdown));
+            dropdown.click();
+            if (country.equalsIgnoreCase("Singapore")) {
+                wait.until(ExpectedConditions.visibilityOfElementLocated(singaporeOption)).click();
+            } else if (country.equalsIgnoreCase("Australia")) {
+                wait.until(ExpectedConditions.visibilityOfElementLocated(australiaOption)).click();
+            }
+        }*/
 
     public void selectCountry(String country) {
         WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(countryDropdown));
-        dropdown.click();
+        actions.moveToElement(dropdown).click().perform(); // simulate mouse click
+
         if (country.equalsIgnoreCase("Singapore")) {
-            wait.until(ExpectedConditions.visibilityOfElementLocated(singaporeOption)).click();
+            WebElement sgOption = wait.until(ExpectedConditions.visibilityOfElementLocated(singaporeOption));
+            actions.moveToElement(sgOption).click().perform();
         } else if (country.equalsIgnoreCase("Australia")) {
-            wait.until(ExpectedConditions.visibilityOfElementLocated(australiaOption)).click();
+            WebElement auOption = wait.until(ExpectedConditions.visibilityOfElementLocated(australiaOption));
+            actions.moveToElement(auOption).click().perform();
         }
     }
 
     public void selectRoles(String roles) {
+        String[] roleList = roles.split(",");
+        WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(roleDropdown));
+        actions.moveToElement(dropdown).click().perform();
+
+        for (String role : roleList) {
+            String trimmed = role.trim();
+            By option = By.xpath(roleOptionXpath(trimmed));
+            WebElement roleOption = wait.until(ExpectedConditions.elementToBeClickable(option));
+            actions.moveToElement(roleOption).click().perform();
+        }
+    }
+
+
+/*    public void selectRoles(String roles) {
         String[] roleList = roles.split(",");
         WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(roleDropdown));
         dropdown.click();
@@ -91,7 +121,7 @@ public class UserPage {
             By option = By.xpath(roleOptionXpath(trimmed));
             wait.until(ExpectedConditions.elementToBeClickable(option)).click();
         }
-    }
+    }*/
 
     public void clickCreate() {
         wait.until(ExpectedConditions.elementToBeClickable(createButton)).click();

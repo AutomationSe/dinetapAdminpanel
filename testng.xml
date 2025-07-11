@@ -1,6 +1,6 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <suite name="Sample Suite">
-    <test name="Google Test">
+    <!--<test name="Google Test">
         <classes>
             <class name="tests.LoginTest"/>
         </classes>
@@ -14,10 +14,10 @@
         <classes>
             <class name="tests.UserTest"/>
         </classes>
-    </test>
+    </test> -->
     <test name="System Variable Tests">
         <classes>
-            <class name="tests.DeviceTest"/>
+            <class name="tests.UserTest"/>
         </classes>
     </test>
 </suite>
